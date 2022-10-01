@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale= 1"/>
+    <title>soundflat</title>
+    <link rel="stylesheet" href="style/main.css">
+    
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+  <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+    <link rel="stylesheet" href="./node_modules/bootsrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  
+<link rel="stylesheet" href="bootstrap.min.css">
+<script src="bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/787078e3f1.js" crossorigin="anonymous"></script>
+  
+  </head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+ 
+<script src="/__/firebase/8.10.1/firebase-app-compat.js"></script>
+<script src="/__/firebase/8.10.1/firebase-auth-compat.js"></script>
+ <script src="/__/firebase/init.js"></script>
+<script type="text/javascript" >
+/*
+//menangani tombol sign in//
+function tombolSignIn() {
+  if(firebase.auth().currentUser){
+    firebase.auth().signOut();
+  }else{
+   var email = document.getElementById('email').value;
+   var password = document.getElementById('password').value;
+   if(email.length < 5){
+     alert('masukkan email');
+     return;
+   }
+   if(password.length < 4){
+     alert('masukkan password');
+     return;
+   }
+   
+ //sign menggunakan email dan password//
+ firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error){
+   //mengatasi error//
+   var errorCode = error.code;
+   var errorMessage = error.Message;
+   }
+   console.log(error);
+   document.getElementById('mulai-sign-in')
+   .disabled = false;
+   });
+  }
+  document.getElementById('mulai-sign-in')
+  .disabled = true;
+}
+
+//menangani tombol sign up//
+function tombolSignUp(){
+  var email = document.getElementById('email')
+  .value;
+  var password = document.getElementById
+  ('password').value;
+  if(email.length < 4){
+    alert('masukkan email');
+    return;
+  }
+  if(password.length < 4){
+    alert('masukkan password');
+    return;
+  }
+  //membuat pengguna dengan email dan password//
+  firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error){
+    //menangani error
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    if(errorCode == 'auth/weak password'){
+      alert('password salah');
+    }else{
+      alert(errorMessage);
+    }
+    console.log(error);
+  });
+}
+
+//mengirim email verifikasi ke user//
+function sendEmailVerification(){
+  firebase.auth().currentUser
+  .sendEmailVerification().then(function(){
+  //email verifikasi terkirim//
+    alert('email verifikasi terkirim!.');
+  });
+}
+
+function sendPasswordReset(){
+  var email = document.getElementById('email')
+  .value;
+  firebase.auth().sendPasswordResetEmail(email)
+  .then(function(){
+    //password reset email terkirim!
+    alert('reset password email terkirim!.');
+  })catch(function(error){
+    //menangani error
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    if(errorCode == 'auth/invalid-email'){
+      alert(errorMessage);
+    }else if(errorCode == 'auth/user-not-found'
+    ){
+      alert(errorMessage);
+    }
+    console.log(error);
+  });
+}
+
+function initApp(){
+  //
+  firebase.auth().onAuthStateChanged(function(user){
+    document.getElementById('mulai-verifi-email').disabled = true;
+  })
+}
+*/
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDL_GcLMzS1SdNghuz3IKMEoOkR-fvB_d4",
+    authDomain: "soundflat-app.firebaseapp.com",
+    projectId: "soundflat-app",
+    storageBucket: "soundflat-app.appspot.com",
+    messagingSenderId: "91970413868",
+    appId: "1:91970413868:web:31660c2bda86488d85f889"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  
+  
+//login with auth google popup//
+async function signIn() {
+  var provider = new GoogleAuthProvider();
+  await signInWithPopup(getAuth(), provider);
+}
+
+function signOutUser() {
+  signOut(getAuth());
+}
+
+function initFirebaseAuth() {
+  onAuthStateChanged(getAuth(), authStateObserver);
+}
+
+function getProfilePicUrl() {
+  return getAuth().currentUser.photoURL || 'img/profile_placeholder.png':
+}
+
+function getUserName() {
+  return getAuth().currentUser.displayName;
+}
+
+function isUserSignedIn() {
+  return !!getAuth().currentUser;
+}
+
+
+function authStateObserver(user) {
+  if(user) {
+    var profilePicUrl = getProfilePicUrl();
+    var userName = getUserName();
+    
+    
+    userPicElement.style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(profilePicUrl) + ');
+    userNameElement.textContent = userName;
+    
+    userNameElement.removeAttribute('hidden');
+    userPicElement.removeAttribute('hidden');
+    signOutButtonElement.removeAttribute('hidden');
+    
+    //menhilangkan tombol sigmin//
+    signInButtonElement.removeAttribute('hidden','true');
+    
+    saveMessagingDeviceToken();
+   } else {
+     
+   userNameElement.setAttribute('hidden', 'true');
+   userPicElement.setAttribute('hidden', 'true');
+  signOutButtonElement.setAttribute('hidden', 'true');
+  
+  //menampilkan tombol signin//
+  signInButtonElement.removeAttribute('hidden');
+  }
+}
+
+const firebaseApp = initializeApp(getFirebaseConfig());
+initFirebaseAuth();
+ </script>
+  <body>
+    <nav class="navbar bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand ps-4 text-white" href="#">
+      <img src="img/compact-disc-solid.svg" alt="" width="28" height="28" class=" align-text" font-color="white">
+      soundflat
+    </a>
+    <div id="user-container">
+      <div hidden id="user-pic"></div>
+      <div hidden id="user-name"></div>
+      <button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+        sign out
+      </button>
+      <button id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white"><i class="material-icons">account_circle</i>
+        sign in
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script src="js/google_signin_firebase.js"></script>
+</body>
+</html>
